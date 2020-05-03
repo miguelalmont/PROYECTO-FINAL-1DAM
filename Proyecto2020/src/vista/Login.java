@@ -40,7 +40,7 @@ public class Login extends javax.swing.JFrame {
         btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Referencias bibliotecarias - Iniciar sesion");
+        setTitle("GRB - Iniciar sesion");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -152,11 +152,11 @@ public class Login extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         this.dispose();
-        Bienvenida.log = null;
+        Inicio.log = null;
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Bienvenida.log = null;
+        Inicio.log = null;
     }//GEN-LAST:event_formWindowClosing
     
     private void cleanPassword() {

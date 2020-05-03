@@ -2,6 +2,7 @@ package controlador;
 
 import java.util.List;
 import modelo.Usuario;
+import vista.Inicio;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,8 +23,10 @@ public class GestionRefBiblio {
     public static void main(String[] args) {
         // TODO code application logic here
         
-                LibrosJDBC librosJDBC = new LibrosJDBC();
-                UsuariosJDBC usuariosJDBC = new UsuariosJDBC();
+                /*LibrosJDBC librosJDBC = new LibrosJDBC();
+                UsuariosJDBC usuariosJDBC = new UsuariosJDBC();*/
+                
+                
 	//Prueba del metodo insert
        /* Usuario newUser = new Usuario();
         newUser.setUsuario("prueba");
@@ -49,12 +52,15 @@ public class GestionRefBiblio {
             System.out.println("");
         });*/
         
-        List<Usuario> usuarios = usuariosJDBC.select();
+        /*List<Usuario> usuarios = usuariosJDBC.select();
         usuarios.stream().map((usuario) -> {
             System.out.print(usuario);
             return usuario;
         }).forEachOrdered((_item) -> {
             System.out.println("");
-        });
+        });*/
+        
+        Inicio ini = new Inicio();
+        ini.setVisible(true);
     }
 }
