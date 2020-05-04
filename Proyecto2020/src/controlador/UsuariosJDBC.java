@@ -5,7 +5,6 @@
  */
 package controlador;
 
-import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +19,7 @@ import modelo.Usuario;
  *
  * @author migue
  */
-public class UsuariosJDBC {
+public class UsuariosJDBC extends conexion.Conexion{
     private final String SQL_INSERT
             = "INSERT INTO usuarios(usuario, password, nombre, correo) VALUES(?,?,?,?)";
 
@@ -37,7 +36,7 @@ public class UsuariosJDBC {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            conn = Conexion.getConnection();
+            conn = getConnection();
             stmt = conn.prepareStatement(SQL_INSERT);
             int index = 1;//contador de columnas
             stmt.setString(index++, user.getUsuario());
@@ -51,23 +50,23 @@ public class UsuariosJDBC {
             e.printStackTrace();
             return false;
         } finally {
-            Conexion.close(stmt);
-            Conexion.close(conn);
+            close(stmt);
+            close(conn);
         }
     }
     
-    public boolean update(Usuario user, Usuario newUser) {
+    public boolean update(Usuario user, Usuario userUpdate) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            conn = Conexion.getConnection();
+            conn = getConnection();
             System.out.println("Ejecutando query:" + SQL_UPDATE);
             stmt = conn.prepareStatement(SQL_UPDATE);
             int index = 1;
-            stmt.setString(index++, newUser.getUsuario());
-            stmt.setString(index++, newUser.getPassword());
-            stmt.setString(index++, newUser.getNombre());
-            stmt.setString(index++, newUser.getMail());
+            stmt.setString(index++, userUpdate.getUsuario());
+            stmt.setString(index++, userUpdate.getPassword());
+            stmt.setString(index++, userUpdate.getNombre());
+            stmt.setString(index++, userUpdate.getMail());
             stmt.setInt(index, user.getId());
             stmt.executeUpdate();
             return true;
@@ -75,8 +74,8 @@ public class UsuariosJDBC {
             e.printStackTrace();
             return false;
         } finally {
-            Conexion.close(stmt);
-            Conexion.close(conn);
+            close(stmt);
+            close(conn);
         }
     }
     
@@ -85,7 +84,7 @@ public class UsuariosJDBC {
         PreparedStatement stmt = null;
         int rows = 0;
         try {
-            conn = Conexion.getConnection();
+            conn = getConnection();
             System.out.println("Ejecutando query:" + SQL_DELETE);
             stmt = conn.prepareStatement(SQL_DELETE);
             stmt.setString(1, iSBN);
@@ -94,8 +93,8 @@ public class UsuariosJDBC {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Conexion.close(stmt);
-            Conexion.close(conn);
+            close(stmt);
+            close(conn);
         }
         return rows;
     }
@@ -107,7 +106,7 @@ public class UsuariosJDBC {
         Usuario user = null;
         List<Usuario> users = new ArrayList<Usuario>();
         try {
-            conn = Conexion.getConnection();
+            conn = getConnection();
             stmt = conn.prepareStatement(SQL_SELECT);
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -126,16 +125,16 @@ public class UsuariosJDBC {
                 user.setUsuario(usuario);
                 user.setNombre(nombre);
                 user.setMail(mail);
-                user.setLast_session(last_log);
+                user.setLastSession(last_log);
                 users.add(user);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Conexion.close(rs);
-            Conexion.close(stmt);
-            Conexion.close(conn);
+            close(rs);
+            close(stmt);
+            close(conn);
         }
         return users;
     }
@@ -148,7 +147,7 @@ public class UsuariosJDBC {
         String sql = "SELECT count(id) FROM usuarios WHERE usuario = ?";
         
         try {
-            conn = Conexion.getConnection();
+            conn = getConnection();
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, usuario);
             rs = stmt.executeQuery();
@@ -164,9 +163,9 @@ public class UsuariosJDBC {
             e.printStackTrace();
             return 1;
         } finally {
-            Conexion.close(rs);
-            Conexion.close(stmt);
-            Conexion.close(conn);
+            close(rs);
+            close(stmt);
+            close(conn);
         }
             
     }
@@ -185,17 +184,23 @@ public class UsuariosJDBC {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
-        String sql = "SELECT id, usuario, password, nombre FROM usuarios WHERE usuario = ?";
+        String sqlLogin = "SELECT id, usuario, password, nombre FROM usuarios WHERE usuario = ?";
         
         try {
-            conn = Conexion.getConnection();
-            stmt = conn.prepareStatement(sql);
+            conn = getConnection();
+            stmt = conn.prepareStatement(sqlLogin);
             stmt.setString(1, user.getUsuario());
             rs = stmt.executeQuery();
             
             if(rs.next()) {
                 
                 if(user.getPassword().equals(rs.getString(3))) {
+                    
+                    String sqlUpdateSession = "UPDATE usuarios SET last_session = ? WHERE id = ?";
+                    stmt = conn.prepareStatement(sqlUpdateSession);
+                    stmt.setString(1, user.getLastSession());
+                    stmt.setInt(2, rs.getInt(1));
+                    stmt.execute();
                     
                     user.setId(rs.getInt(1));
                     user.setNombre(rs.getString(4));
@@ -213,9 +218,9 @@ public class UsuariosJDBC {
             e.printStackTrace();
             return false;
         } finally {
-            Conexion.close(rs);
-            Conexion.close(stmt);
-            Conexion.close(conn);
+            close(rs);
+            close(stmt);
+            close(conn);
         }
     }
 }

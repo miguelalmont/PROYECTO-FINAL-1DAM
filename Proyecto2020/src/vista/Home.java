@@ -5,6 +5,7 @@
  */
 package vista;
 
+import controlador.GestionRefBiblio;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,11 +13,11 @@ import javax.swing.JOptionPane;
  * @author migue
  */
 public class Home extends javax.swing.JFrame {
-    
-    
+
     public static MenuLibro mLib;
     public static MenuArticulo mArt;
     public static MenuNota mNot;
+
     /**
      * Creates new form vista
      */
@@ -36,8 +37,9 @@ public class Home extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        cerrarSesionBtn = new javax.swing.JButton();
         imagen = new javax.swing.JLabel();
+        actualUsr = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("GRB - Inicio");
@@ -48,6 +50,7 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jButton1.setText("Libro");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -55,6 +58,7 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jButton2.setText("Artículo");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -62,6 +66,7 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jButton3.setText("Nota");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,14 +74,20 @@ public class Home extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Cerrar sesion");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        cerrarSesionBtn.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        cerrarSesionBtn.setText("Cerrar sesion");
+        cerrarSesionBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                cerrarSesionBtnActionPerformed(evt);
             }
         });
 
+        imagen.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/book.png"))); // NOI18N
+
+        actualUsr.setFont(new java.awt.Font("Century Gothic", 0, 10)); // NOI18N
+        actualUsr.setForeground(new java.awt.Color(153, 153, 153));
+        actualUsr.setText("Usuario: "+Login.user.getNombre());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -86,15 +97,17 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addGap(0, 154, Short.MAX_VALUE))
+                        .addComponent(cerrarSesionBtn)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(imagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(actualUsr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(imagen, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
                         .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -103,6 +116,8 @@ public class Home extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(actualUsr)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(imagen)
                         .addGap(43, 43, 43))
                     .addGroup(layout.createSequentialGroup()
@@ -113,7 +128,7 @@ public class Home extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jButton4)
+                .addComponent(cerrarSesionBtn)
                 .addContainerGap())
         );
 
@@ -122,58 +137,73 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        if(mLib == null) {
+
+        if (mLib == null) {
             mLib = new MenuLibro();
             mLib.setVisible(true);
         }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if(mNot == null) {
+        
+        if (mNot == null) {
             mNot = new MenuNota();
             mNot.setVisible(true);
         }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // Se pide una confirmación antes de finalizar el programa
         int option = JOptionPane.showConfirmDialog(null,
-            "¿Estás seguro de que quieres cerrar la aplicacion?",
-            "Confirmacion de cierre",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
+                "¿Estás seguro de que quieres cerrar la aplicacion?",
+                "Confirmacion de cierre",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void cerrarSesionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionBtnActionPerformed
         int option = JOptionPane.showConfirmDialog(null,
-            "¿Estás seguro de que quieres abandonar la sesion?",
-            "Confirmacion de cierre",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
+                "¿Estás seguro de que quieres abandonar la sesion?",
+                "Confirmacion de cierre",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
         if (option == JOptionPane.YES_OPTION) {
-            mLib.dispose();
-            mArt.dispose();
-            mNot.dispose();
-            this.dispose();
+
+            if (mLib != null) {
+                mLib.dispose();
+                mLib = null;
+            }
+            if (mArt != null) {
+                mArt.dispose();
+                mArt = null;
+            }
+            if (mNot != null) {
+                mNot.dispose();
+                mNot = null;
+            }
+            
+            Login.user = null;
             Inicio.log = null;
+            this.dispose();
+            GestionRefBiblio.ini.setVisible(true);
+            
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_cerrarSesionBtnActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        if(mArt == null) {
+        
+        if (mArt == null) {
             mArt = new MenuArticulo();
             mArt.setVisible(true);
         }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
-    
-    
-    
+
     /**
      * @param args the command line arguments
      */
@@ -212,13 +242,13 @@ public class Home extends javax.swing.JFrame {
         });
     }
 
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel actualUsr;
+    private javax.swing.JButton cerrarSesionBtn;
     private javax.swing.JLabel imagen;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     // End of variables declaration//GEN-END:variables
 }

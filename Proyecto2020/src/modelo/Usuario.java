@@ -12,7 +12,7 @@ package modelo;
 public class Usuario {
 
     private int id;
-    private String usuario, password, nombre, mail, last_session;
+    private String usuario, password, nombre, mail, lastSession;
 
     public Usuario() {
     }
@@ -57,17 +57,17 @@ public class Usuario {
         this.mail = mail;
     }
 
-    public String getLast_session() {
-        return last_session;
+    public String getLastSession() {
+        return lastSession;
     }
 
-    public void setLast_session(String last_session) {
-        this.last_session = last_session;
+    public void setLastSession(String last_session) {
+        this.lastSession = last_session;
     }
 
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", usuario=" + usuario + ", password=" + password + ", nombre=" + nombre + ", mail=" + mail + ", last_session=" + last_session + '}';
+        return "Usuario{" + "id=" + id + ", usuario=" + usuario + ", password=" + password + ", nombre=" + nombre + ", mail=" + mail + ", lastSession=" + lastSession + '}';
     }
     
 }

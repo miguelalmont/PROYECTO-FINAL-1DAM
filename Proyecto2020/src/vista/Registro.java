@@ -46,7 +46,7 @@ public class Registro extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("GRB - Registro de usuario");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -269,6 +269,7 @@ public class Registro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.dispose();
         Inicio.reg = null;
     }//GEN-LAST:event_formWindowClosing
 

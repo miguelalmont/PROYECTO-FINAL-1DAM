@@ -1,7 +1,5 @@
 package controlador;
 
-import java.util.List;
-import modelo.Usuario;
 import vista.Inicio;
 
 /*
@@ -16,7 +14,8 @@ import vista.Inicio;
  * @author migue
  */
 public class GestionRefBiblio {
-
+    
+    public static Inicio ini;
     /**
      * @param args the command line arguments
      */
@@ -59,8 +58,7 @@ public class GestionRefBiblio {
         }).forEachOrdered((_item) -> {
             System.out.println("");
         });*/
-        
-        Inicio ini = new Inicio();
-        ini.setVisible(true);
+            ini = new Inicio();
+            ini.setVisible(true);
     }
 }

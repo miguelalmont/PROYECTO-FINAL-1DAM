@@ -5,7 +5,10 @@
  */
 package vista;
 
+import controlador.GestionRefBiblio;
 import controlador.UsuariosJDBC;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import modelo.Hash;
 import modelo.Usuario;
@@ -15,7 +18,10 @@ import modelo.Usuario;
  * @author migue
  */
 public class Login extends javax.swing.JFrame {
-
+    
+    public static Usuario user;
+    
+    private static final String DATE_FORMATTER= "yyyy-MM-dd HH:mm:ss";
     /**
      * Creates new form Login
      */
@@ -39,8 +45,9 @@ public class Login extends javax.swing.JFrame {
         btnLogin = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("GRB - Iniciar sesion");
+        setModalExclusionType(null);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -98,7 +105,7 @@ public class Login extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -120,7 +127,12 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         
         UsuariosJDBC logUser = new UsuariosJDBC();
-        Usuario user = new Usuario();
+        user = new Usuario();
+        
+        LocalDateTime sessionDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMATTER);
+        String formatDateTime = sessionDateTime.format(formatter);
+        
         
         String pass = new String(txtPassword.getPassword());
         
@@ -133,12 +145,21 @@ public class Login extends javax.swing.JFrame {
             
             user.setUsuario(txtUser.getText());
             user.setPassword(encryptedPass);
+            user.setLastSession(formatDateTime);
             
             if(logUser.login(user)) {
                 
                 
                 
-                this.dispose();
+                Inicio.log.dispose();
+                
+                if(Inicio.reg != null) {
+                    Inicio.reg.dispose();
+                    Inicio.reg = null;
+                }
+                
+                GestionRefBiblio.ini.setVisible(false);
+                //GestionRefBiblio.window = false;
                 
                 Home home = new Home();
                 home.setVisible(true);
@@ -151,11 +172,14 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        user = null;
         this.dispose();
         Inicio.log = null;
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        user = null;
+        this.dispose();
         Inicio.log = null;
     }//GEN-LAST:event_formWindowClosing
     
