@@ -141,6 +141,8 @@ public class Home extends javax.swing.JFrame {
         if (mLib == null) {
             mLib = new MenuLibro();
             mLib.setVisible(true);
+            MenuLibro.tablaLibros.setModel(MenuLibro.getTabla());
+            MenuLibro.isbnCheckBox.setSelected(true);
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -191,7 +193,6 @@ public class Home extends javax.swing.JFrame {
             Inicio.log = null;
             this.dispose();
             GestionRefBiblio.ini.setVisible(true);
-            
         }
     }//GEN-LAST:event_cerrarSesionBtnActionPerformed
 

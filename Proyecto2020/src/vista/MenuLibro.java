@@ -7,8 +7,8 @@ package vista;
 
 import controlador.LibrosJDBC;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import modelo.Libro;
-
 
 /**
  *
@@ -36,14 +36,13 @@ public class MenuLibro extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         nuevoLibroBtn = new javax.swing.JButton();
-        verListaBtn = new javax.swing.JButton();
         modLibroBtn = new javax.swing.JButton();
         eliminarLibroBtn = new javax.swing.JButton();
         nuevaNotaBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
         verNotasBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tablaLibros = new javax.swing.JTable();
         tituloBox = new javax.swing.JTextField();
         autorBox = new javax.swing.JTextField();
         editorialBox = new javax.swing.JTextField();
@@ -56,6 +55,7 @@ public class MenuLibro extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         anioFormatedBox = new javax.swing.JFormattedTextField();
         nPaginasFormatedBox = new javax.swing.JFormattedTextField();
+        isbnCheckBox = new javax.swing.JCheckBox();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,19 +90,21 @@ public class MenuLibro extends javax.swing.JFrame {
             }
         });
 
-        verListaBtn.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        verListaBtn.setText("Ver libros");
-        verListaBtn.addActionListener(new java.awt.event.ActionListener() {
+        modLibroBtn.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        modLibroBtn.setText("Modificar libro");
+        modLibroBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                verListaBtnActionPerformed(evt);
+                modLibroBtnActionPerformed(evt);
             }
         });
 
-        modLibroBtn.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        modLibroBtn.setText("Modificar libro");
-
         eliminarLibroBtn.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         eliminarLibroBtn.setText("Eliminar libro");
+        eliminarLibroBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarLibroBtnActionPerformed(evt);
+            }
+        });
 
         nuevaNotaBtn.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         nuevaNotaBtn.setText("Añadir nota");
@@ -123,15 +125,9 @@ public class MenuLibro extends javax.swing.JFrame {
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tablaLibros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "ISBN", "Titulo", "Autor", "Editorial", "Año", "Nº Pags"
@@ -144,10 +140,21 @@ public class MenuLibro extends javax.swing.JFrame {
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
         });
-        jTable2.setColumnSelectionAllowed(true);
-        jScrollPane2.setViewportView(jTable2);
-        jTable2.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaLibros.setColumnSelectionAllowed(true);
+        tablaLibros.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tablaLibros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaLibrosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tablaLibros);
+        tablaLibros.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         isbnBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -176,6 +183,12 @@ public class MenuLibro extends javax.swing.JFrame {
 
         nPaginasFormatedBox.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#"))));
 
+        isbnCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isbnCheckBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -192,36 +205,36 @@ public class MenuLibro extends javax.swing.JFrame {
                     .addComponent(modLibroBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
                     .addComponent(eliminarLibroBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
                     .addComponent(nuevaNotaBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
-                    .addComponent(verListaBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
                     .addComponent(nuevoLibroBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
                                 .addComponent(autorBox, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(tituloBox, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(isbnBox, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tituloBox, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(19, 19, 19)
+                                .addComponent(isbnBox, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(isbnCheckBox)))
+                        .addGap(46, 46, 46)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(anioFormatedBox, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(editorialBox, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
-                            .addComponent(nPaginasFormatedBox))
-                        .addGap(46, 46, 46))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nPaginasFormatedBox)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -232,27 +245,14 @@ public class MenuLibro extends javax.swing.JFrame {
                 .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(nuevoLibroBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(verListaBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(modLibroBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(eliminarLibroBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nuevaNotaBtn))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(verNotasBtn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(editorialBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(isbnBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(isbnCheckBox))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tituloBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -264,8 +264,18 @@ public class MenuLibro extends javax.swing.JFrame {
                             .addComponent(autorBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel7)
-                            .addComponent(nPaginasFormatedBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                            .addComponent(nPaginasFormatedBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(nuevoLibroBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(modLibroBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eliminarLibroBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nuevaNotaBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(verNotasBtn)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(backBtn)
                 .addContainerGap())
         );
@@ -274,21 +284,17 @@ public class MenuLibro extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void verListaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verListaBtnActionPerformed
-        
-    }//GEN-LAST:event_verListaBtnActionPerformed
-
     private void nuevoLibroBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoLibroBtnActionPerformed
-        
+
         LibrosJDBC librosConn = new LibrosJDBC();
-        
+
         if (isbnBox.getText().length() == 0 || tituloBox.getText().length() == 0 || autorBox.getText().length() == 0 || editorialBox.getText().length() == 0 || anioFormatedBox.getText().length() == 0 || nPaginasFormatedBox.getText().length() == 0) {
-            
+
             JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacios.");
         } else {
-                
-            if(librosConn.existeISBN(isbnBox.getText()) == 0) {
-                
+
+            if (librosConn.existeISBN(isbnBox.getText()) == 0) {
+
                 Libro libro = new Libro();
                 LibrosJDBC libroJDBC = new LibrosJDBC();
 
@@ -304,8 +310,9 @@ public class MenuLibro extends javax.swing.JFrame {
                 libro.setnPaginas(pags);
 
                 libroJDBC.insert(libro);
-            }
-            else {
+                tablaLibros.setModel(getTabla());
+                clean();
+            } else {
                 JOptionPane.showMessageDialog(null, "El ISBN ya existe.");
             }
         }
@@ -332,6 +339,80 @@ public class MenuLibro extends javax.swing.JFrame {
     private void anioFormatedBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anioFormatedBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_anioFormatedBoxActionPerformed
+
+    private void tablaLibrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaLibrosMouseClicked
+        DefaultTableModel modelo = (DefaultTableModel) tablaLibros.getModel();
+
+        if (evt.getButton() == 1)//boton izquierdo
+        {
+            int fila = tablaLibros.rowAtPoint(evt.getPoint());
+            if (fila > -1) {
+                isbnBox.setText(String.valueOf(tablaLibros.getValueAt(fila, 0)));
+                tituloBox.setText(String.valueOf(tablaLibros.getValueAt(fila, 1)));
+                autorBox.setText(String.valueOf(tablaLibros.getValueAt(fila, 2)));
+                editorialBox.setText(String.valueOf(tablaLibros.getValueAt(fila, 3)));
+                anioFormatedBox.setText(String.valueOf(tablaLibros.getValueAt(fila, 4)));
+                nPaginasFormatedBox.setText(String.valueOf(tablaLibros.getValueAt(fila, 5)));
+                if (isbnCheckBox.isSelected()) {
+                    isbnCheckBox.setSelected(false);
+                    isbnBox.setEnabled(false);
+                }
+            }
+        }
+    }//GEN-LAST:event_tablaLibrosMouseClicked
+
+    private void eliminarLibroBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarLibroBtnActionPerformed
+        
+        LibrosJDBC librosConn = new LibrosJDBC();
+        
+        if(librosConn.existeISBN(isbnBox.getText()) > 0){
+            librosConn.delete(isbnBox.getText());
+            
+            tablaLibros.setModel(getTabla());
+        } else {
+            JOptionPane.showMessageDialog(null, "El ISBN introducido no esta registrado.");
+        }
+        
+    }//GEN-LAST:event_eliminarLibroBtnActionPerformed
+
+    private void modLibroBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modLibroBtnActionPerformed
+        
+        LibrosJDBC librosConn = new LibrosJDBC();
+        
+        if(librosConn.existeISBN(isbnBox.getText()) > 0){
+            
+            Libro libro = new Libro();
+                LibrosJDBC libroJDBC = new LibrosJDBC();
+
+                libro.setISBN(isbnBox.getText());
+                libro.setTitulo(tituloBox.getText());
+                libro.setAutor(autorBox.getText());
+                libro.setEditorial(editorialBox.getText());
+
+                int anio = Integer.parseInt(anioFormatedBox.getText());
+                libro.setAnio(anio);
+
+                int pags = Integer.parseInt(nPaginasFormatedBox.getText());
+                libro.setnPaginas(pags);
+
+                libroJDBC.update(libro, isbnBox.getText());
+                
+                clean();
+                tablaLibros.setModel(getTabla());
+        } else {
+            JOptionPane.showMessageDialog(null, "El ISBN introducido no esta registrado.");
+        }
+        
+    }//GEN-LAST:event_modLibroBtnActionPerformed
+
+    private void isbnCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isbnCheckBoxActionPerformed
+        
+        if(isbnCheckBox.isSelected()){
+            isbnBox.setEnabled(true);
+        } else {
+            isbnBox.setEnabled(false);
+        }
+    }//GEN-LAST:event_isbnCheckBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -368,7 +449,45 @@ public class MenuLibro extends javax.swing.JFrame {
             }
         });
     }
+    
+    public static DefaultTableModel getTabla() {
+        LibrosJDBC librosConn = new LibrosJDBC();
 
+        DefaultTableModel modelo = (DefaultTableModel) tablaLibros.getModel();
+
+        String[] columNames = {"ISBN","Titulo","Autor","Editorial","Año","Nº Pags"};
+        
+        if (librosConn.cuentaLibros() < 1) {
+            //JOptionPane.showMessageDialog(null, "La lista de libros esta vacia.");  
+        } else {
+            
+            Object[][] fila = new Object[librosConn.select().size()][6];
+            int i = 0;
+            
+            for (Libro libro : librosConn.select()) {
+                fila[i][0] = libro.getISBN();
+                fila[i][1] = libro.getTitulo();
+                fila[i][2] = libro.getAutor();
+                fila[i][3] = libro.getEditorial();
+                fila[i][4] = libro.getAnio();
+                fila[i][5] = libro.getnPaginas();
+                i++;
+            }
+            
+            modelo.setDataVector(fila, columNames);
+            
+        }
+        return modelo;
+    }
+    
+    private void clean() {
+        isbnBox.setText("");
+        tituloBox.setText("");
+        autorBox.setText("");
+        editorialBox.setText("");
+        anioFormatedBox.setText("");
+        nPaginasFormatedBox.setText("");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFormattedTextField anioFormatedBox;
     private javax.swing.JTextField autorBox;
@@ -376,6 +495,7 @@ public class MenuLibro extends javax.swing.JFrame {
     private javax.swing.JTextField editorialBox;
     private javax.swing.JButton eliminarLibroBtn;
     private javax.swing.JTextField isbnBox;
+    protected static javax.swing.JCheckBox isbnCheckBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -386,13 +506,12 @@ public class MenuLibro extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JButton modLibroBtn;
     private javax.swing.JFormattedTextField nPaginasFormatedBox;
     private javax.swing.JButton nuevaNotaBtn;
     private javax.swing.JButton nuevoLibroBtn;
+    protected static javax.swing.JTable tablaLibros;
     private javax.swing.JTextField tituloBox;
-    private javax.swing.JButton verListaBtn;
     private javax.swing.JButton verNotasBtn;
     // End of variables declaration//GEN-END:variables
 }

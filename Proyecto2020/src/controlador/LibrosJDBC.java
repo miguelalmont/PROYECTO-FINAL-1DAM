@@ -24,13 +24,17 @@ public class LibrosJDBC extends conexion.Conexion{
             = "INSERT INTO libros(ISBN, autor, titulo, editorial, anio, n_paginas, user_libro) VALUES(?,?,?,?,?,?,?)";
 
     private final String SQL_UPDATE
-            = "UPDATE libros SET ISBN = ?, autor = ?, titulo = ?, editorial = ?, anio = ?, n_paginas = ? WHERE ISBN = ? AND user_libro = ?";
+            = "UPDATE libros SET ISBN = ?, autor = ?, titulo = ?, editorial = ?, anio = ?, n_paginas = ? WHERE id_libro = ?";
 
     private final String SQL_DELETE
             = "DELETE FROM libros WHERE ISBN = ? AND user_libro = ?";
 
     private final String SQL_SELECT
             = "SELECT ISBN, autor, titulo, editorial, anio, n_paginas FROM libros WHERE user_libro = ? ORDER BY ISBN";
+    
+    private final String SQL_getId
+            = "SELECT id_libro FROM libros WHERE user_libro = ? AND ISBN = ?";
+    
     
     public int insert(Libro libro) {
         Connection conn = null;
@@ -76,8 +80,9 @@ public class LibrosJDBC extends conexion.Conexion{
             stmt.setString(index++, libro.getEditorial());
             stmt.setInt(index++, libro.getAnio());
             stmt.setInt(index++, libro.getnPaginas());
-            stmt.setString(index++, iSBNold);
-            stmt.setInt(index, Login.user.getId());
+            
+            stmt.setInt(index, getId(iSBNold));           
+            
             rows = stmt.executeUpdate();
             System.out.println("Registros actualizados:" + rows);
         } catch (SQLException e) {
@@ -129,11 +134,7 @@ public class LibrosJDBC extends conexion.Conexion{
                 String editorial = rs.getString(4);
                 int anio = rs.getInt(5);
                 int nPaginas = rs.getInt(6);
-                /*System.out.print(" " + id_persona);
-                 System.out.print(" " + nombre);
-                 System.out.print(" " + apellido);
-                 System.out.println();
-                 */
+                
                 libro = new Libro();
                 libro.setISBN(iSBN);
                 libro.setAutor(autor);
@@ -159,24 +160,85 @@ public class LibrosJDBC extends conexion.Conexion{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
-        String sql = "SELECT count(ISBN) FROM libros WHERE ISBN = ?";
+        String sql = "SELECT count(ISBN) FROM libros WHERE ISBN = ? AND user_libro = ?";
         
         try {
             conn = getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1, iSBN);
+            int index = 1;
+            stmt.setString(index++, iSBN);
+            stmt.setInt(index, Login.user.getId());
             rs = stmt.executeQuery();
             
             if(rs.next()) {
                 return rs.getInt(1);
             }
             else {
-                return 1;
+                return -1;
             }
         }
         catch (SQLException e){
             e.printStackTrace();
-            return 1;
+            return -1;
+        } finally {
+            close(rs);
+            close(stmt);
+            close(conn);
+        }
+    }
+    
+    public int cuentaLibros() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int registros = 0;
+        
+        String sql = "SELECT count(*) AS total FROM libros WHERE user_libro = ?";
+        
+        try {
+            conn = getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Login.user.getId());
+            rs = stmt.executeQuery();
+            rs.next();
+            registros = rs.getInt("total");
+            return registros;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return 0;
+        } finally {
+            close(rs);
+            close(stmt);
+            close(conn);
+        }
+    }
+    
+    public int getId(String iSBN){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        String sql = SQL_getId;
+        
+        try {
+            conn = getConnection();
+            stmt = conn.prepareStatement(sql);
+            int index = 1;
+            stmt.setInt(index++, Login.user.getId());
+            stmt.setString(index, iSBN);
+            rs = stmt.executeQuery();
+            
+            if(rs.next()) {
+                return rs.getInt(1);
+            }
+            else {
+                return -1;
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return -1;
         } finally {
             close(rs);
             close(stmt);
