@@ -5,23 +5,14 @@
  */
 package vista;
 
-import controlador.GestionRefBiblio;
-import controlador.UsuariosJDBC;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import javax.swing.JOptionPane;
-import modelo.Hash;
-import modelo.Usuario;
+import controlador.InicioControlador;
+import controlador.LoginControlador;
 
 /**
  *
  * @author migue
  */
 public class Login extends javax.swing.JFrame {
-    
-    public static Usuario user;
-    
-    private static final String DATE_FORMATTER= "yyyy-MM-dd HH:mm:ss";
     /**
      * Creates new form Login
      */
@@ -42,8 +33,8 @@ public class Login extends javax.swing.JFrame {
         txtUser = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
-        btnLogin = new javax.swing.JButton();
-        btnBack = new javax.swing.JButton();
+        __INICIAR_SESION = new javax.swing.JButton();
+        __VOLVER = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("GRB - Iniciar sesion");
@@ -65,21 +56,11 @@ public class Login extends javax.swing.JFrame {
 
         txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        btnLogin.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        btnLogin.setText("Iniciar sesion");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
+        __INICIAR_SESION.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        __INICIAR_SESION.setText("Iniciar sesion");
 
-        btnBack.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        btnBack.setText("Volver");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
+        __VOLVER.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        __VOLVER.setText("Volver");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,9 +78,9 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(txtUser)
                             .addComponent(txtPassword)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnBack)
+                        .addComponent(__VOLVER)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
-                        .addComponent(btnLogin)))
+                        .addComponent(__INICIAR_SESION)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,8 +96,8 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnBack)
-                    .addComponent(btnLogin))
+                    .addComponent(__VOLVER)
+                    .addComponent(__INICIAR_SESION))
                 .addContainerGap())
         );
 
@@ -124,68 +105,12 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        
-        UsuariosJDBC logUser = new UsuariosJDBC();
-        user = new Usuario();
-        
-        LocalDateTime sessionDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMATTER);
-        String formatDateTime = sessionDateTime.format(formatter);
-        
-        
-        String pass = new String(txtPassword.getPassword());
-        
-        if(txtUser.getText().length()==0 || txtPassword.getText().length()==0) {
-            JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacios.");
-            
-        }
-        else {
-            String encryptedPass = Hash.sha1(pass);
-            
-            user.setUsuario(txtUser.getText());
-            user.setPassword(encryptedPass);
-            user.setLastSession(formatDateTime);
-            
-            if(logUser.login(user)) {
-                
-                
-                
-                Inicio.log.dispose();
-                
-                if(Inicio.reg != null) {
-                    Inicio.reg.dispose();
-                    Inicio.reg = null;
-                }
-                
-                GestionRefBiblio.ini.setVisible(false);
-                //GestionRefBiblio.window = false;
-                
-                Home home = new Home();
-                home.setVisible(true);
-            }
-            else {
-                JOptionPane.showMessageDialog(null, "Datos incorrectos.");
-                cleanPassword();
-            }
-        }
-    }//GEN-LAST:event_btnLoginActionPerformed
-
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        user = null;
-        this.dispose();
-        Inicio.log = null;
-    }//GEN-LAST:event_btnBackActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        user = null;
+        LoginControlador.user = null;
         this.dispose();
-        Inicio.log = null;
+        InicioControlador.log = null;
     }//GEN-LAST:event_formWindowClosing
-    
-    private void cleanPassword() {
-        txtPassword.setText("");
-    }
+
     /**
      * @param args the command line arguments
      */
@@ -222,11 +147,11 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnLogin;
+    public javax.swing.JButton __INICIAR_SESION;
+    public javax.swing.JButton __VOLVER;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUser;
+    public javax.swing.JPasswordField txtPassword;
+    public javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }

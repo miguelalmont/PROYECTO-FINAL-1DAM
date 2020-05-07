@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controlador;
+package modelo;
 
+import controlador.LoginControlador;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import modelo.Libro;
-import vista.Login;
 
 /**
  *
@@ -32,15 +31,14 @@ public class LibrosJDBC extends conexion.Conexion{
     private final String SQL_SELECT
             = "SELECT ISBN, autor, titulo, editorial, anio, n_paginas FROM libros WHERE user_libro = ? ORDER BY ISBN";
     
-    private final String SQL_getId
+    private final String SQL_GET_ID
             = "SELECT id_libro FROM libros WHERE user_libro = ? AND ISBN = ?";
     
     
     public int insert(Libro libro) {
         Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;//no se utiliza en este ejercicio		
-        int rows = 0; //registros afectados
+        PreparedStatement stmt = null;		
+        int rows = 0;
         try {
             conn = getConnection();
             stmt = conn.prepareStatement(SQL_INSERT);
@@ -51,7 +49,7 @@ public class LibrosJDBC extends conexion.Conexion{
             stmt.setString(index++, libro.getEditorial());
             stmt.setInt(index++, libro.getAnio());
             stmt.setInt(index++, libro.getnPaginas());
-            stmt.setInt(index, Login.user.getId());
+            stmt.setInt(index, LoginControlador.user.getId());
             System.out.println("Ejecutando query:" + SQL_INSERT);
             rows = stmt.executeUpdate();//no. registros afectados
             System.out.println("Registros afectados:" + rows);
@@ -104,7 +102,7 @@ public class LibrosJDBC extends conexion.Conexion{
             stmt = conn.prepareStatement(SQL_DELETE);
             int index = 1;
             stmt.setString(index++, iSBN);
-            stmt.setInt(index, Login.user.getId());
+            stmt.setInt(index, LoginControlador.user.getId());
             rows = stmt.executeUpdate();
             System.out.println("Registros eliminados:" + rows);
         } catch (SQLException e) {
@@ -125,7 +123,7 @@ public class LibrosJDBC extends conexion.Conexion{
         try {
             conn = getConnection();
             stmt = conn.prepareStatement(SQL_SELECT);
-            stmt.setInt(1, Login.user.getId());
+            stmt.setInt(1, LoginControlador.user.getId());
             rs = stmt.executeQuery();
             while (rs.next()) {
                 String iSBN = rs.getString(1);
@@ -167,7 +165,7 @@ public class LibrosJDBC extends conexion.Conexion{
             stmt = conn.prepareStatement(sql);
             int index = 1;
             stmt.setString(index++, iSBN);
-            stmt.setInt(index, Login.user.getId());
+            stmt.setInt(index, LoginControlador.user.getId());
             rs = stmt.executeQuery();
             
             if(rs.next()) {
@@ -191,14 +189,14 @@ public class LibrosJDBC extends conexion.Conexion{
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        int registros = 0;
+        int registros;
         
         String sql = "SELECT count(*) AS total FROM libros WHERE user_libro = ?";
         
         try {
             conn = getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Login.user.getId());
+            stmt.setInt(1, LoginControlador.user.getId());
             rs = stmt.executeQuery();
             rs.next();
             registros = rs.getInt("total");
@@ -219,13 +217,13 @@ public class LibrosJDBC extends conexion.Conexion{
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
-        String sql = SQL_getId;
+        String sql = SQL_GET_ID;
         
         try {
             conn = getConnection();
             stmt = conn.prepareStatement(sql);
             int index = 1;
-            stmt.setInt(index++, Login.user.getId());
+            stmt.setInt(index++, LoginControlador.user.getId());
             stmt.setString(index, iSBN);
             rs = stmt.executeQuery();
             
@@ -245,4 +243,64 @@ public class LibrosJDBC extends conexion.Conexion{
             close(conn);
         }
     }
+    
+    public int coincidencias(String busqueda) {
+        
+        int i = 0;
+        List<String> lista = new ArrayList<>();
+        List<Libro> libros = select();
+        
+        libros.stream().map((libro) -> {
+            lista.add(libro.getISBN());
+            return libro;
+        }).map((libro) -> {
+            lista.add(libro.getTitulo());
+            return libro;
+        }).map((libro) -> {
+            lista.add(libro.getAutor());
+            return libro;
+        }).map((libro) -> {
+            lista.add(libro.getEditorial());
+            return libro;
+        }).map((libro) -> {
+            lista.add(Integer.toString(libro.getAnio()));
+            return libro;
+        }).forEachOrdered((libro) -> {
+            lista.add(Integer.toString(libro.getnPaginas()));
+        });
+        
+        i = lista.stream().filter((resultado) -> (resultado.contains(busqueda))).map((_item) -> 1).reduce(i, Integer::sum);
+        
+        return i;
+    }
+    
+    public List<Libro> buscar(String busqueda) {
+        
+        List<Libro> libros = select();
+        List<Libro> objetivos = new ArrayList<>();
+        
+        libros.forEach((libro) -> {
+            if(libro.getISBN().contains(busqueda)) {
+                objetivos.add(libro);
+            }
+            else if(libro.getTitulo().contains(busqueda)) {
+                objetivos.add(libro);
+            }
+            else if(libro.getAutor().contains(busqueda)) {
+                objetivos.add(libro);
+            }
+            else if(libro.getEditorial().contains(busqueda)) {
+                objetivos.add(libro);
+            }
+            else if(Integer.toString(libro.getAnio()).contains(busqueda)) {
+                objetivos.add(libro);
+            }
+            else if(Integer.toString(libro.getnPaginas()).contains(busqueda)) {
+                objetivos.add(libro);
+            }
+        });
+        
+        return objetivos;
+    }
+    
 }

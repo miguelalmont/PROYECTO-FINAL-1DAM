@@ -17,8 +17,6 @@ public class Inicio extends javax.swing.JFrame {
      * Creates new form Inicio
      */
     
-    public static Login log;
-    public static Registro reg;
     
     public Inicio() {
         initComponents();
@@ -33,8 +31,8 @@ public class Inicio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnRegister = new javax.swing.JButton();
-        btnLogIn = new javax.swing.JButton();
+        __NUEVO_USUARIO = new javax.swing.JButton();
+        __INICIAR_SESION = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -47,21 +45,11 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
-        btnRegister.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        btnRegister.setText("Nuevo usuario");
-        btnRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegisterActionPerformed(evt);
-            }
-        });
+        __NUEVO_USUARIO.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        __NUEVO_USUARIO.setText("Nuevo usuario");
 
-        btnLogIn.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        btnLogIn.setText("Iniciar sesion");
-        btnLogIn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogInActionPerformed(evt);
-            }
-        });
+        __INICIAR_SESION.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        __INICIAR_SESION.setText("Iniciar sesion");
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel1.setText("<html>Bienvenido a <b>GRB</b> (Gestion de Referencias Bibliograficas). </html>");
@@ -77,9 +65,9 @@ public class Inicio extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnLogIn)
+                        .addComponent(__INICIAR_SESION)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                        .addComponent(btnRegister))
+                        .addComponent(__NUEVO_USUARIO))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -97,30 +85,14 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogIn)
-                    .addComponent(btnRegister))
+                    .addComponent(__INICIAR_SESION)
+                    .addComponent(__NUEVO_USUARIO))
                 .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogInActionPerformed
-        
-        if(log == null) {
-            log = new Login();
-            log.setVisible(true);
-        }
-    }//GEN-LAST:event_btnLogInActionPerformed
-
-    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        
-        if(reg == null) {
-            reg = new Registro();
-            reg.setVisible(true);
-        }
-    }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
          // Se pide una confirmación antes de finalizar el programa
@@ -173,8 +145,8 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogIn;
-    private javax.swing.JButton btnRegister;
+    public javax.swing.JButton __INICIAR_SESION;
+    public javax.swing.JButton __NUEVO_USUARIO;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables

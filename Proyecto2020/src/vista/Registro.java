@@ -5,10 +5,7 @@
  */
 package vista;
 
-import controlador.UsuariosJDBC;
-import javax.swing.JOptionPane;
-import modelo.Hash;
-import modelo.Usuario;
+import controlador.InicioControlador;
 
 /**
  *
@@ -42,9 +39,9 @@ public class Registro extends javax.swing.JFrame {
         txtName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtMail = new javax.swing.JTextField();
-        btnlRegister = new javax.swing.JButton();
+        __CREAR_USUARIO = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        btnBack = new javax.swing.JButton();
+        __VOLVER = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("GRB - Registro de usuario");
@@ -65,18 +62,8 @@ public class Registro extends javax.swing.JFrame {
         jLabel3.setText("Confirmar contraseña:");
 
         txtUser.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUserActionPerformed(evt);
-            }
-        });
 
         txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
-            }
-        });
 
         txtConfirmPass.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
@@ -84,35 +71,20 @@ public class Registro extends javax.swing.JFrame {
         jLabel4.setText("Nombre y apellidos:");
 
         txtName.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNameActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel5.setText("Correo electronico:");
 
         txtMail.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        btnlRegister.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        btnlRegister.setText("Crear usuario");
-        btnlRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnlRegisterActionPerformed(evt);
-            }
-        });
+        __CREAR_USUARIO.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        __CREAR_USUARIO.setText("Crear usuario");
 
         jLabel6.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         jLabel6.setText("NUEVO USUARIO");
 
-        btnBack.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        btnBack.setText("Volver");
-        btnBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackActionPerformed(evt);
-            }
-        });
+        __VOLVER.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        __VOLVER.setText("Volver");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,9 +96,9 @@ public class Registro extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(btnBack)
+                                .addComponent(__VOLVER)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnlRegister))
+                                .addComponent(__CREAR_USUARIO))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -177,100 +149,22 @@ public class Registro extends javax.swing.JFrame {
                         .addComponent(jLabel5)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnlRegister)
-                    .addComponent(btnBack))
+                    .addComponent(__CREAR_USUARIO)
+                    .addComponent(__VOLVER))
                 .addContainerGap())
         );
 
         jLabel3.getAccessibleContext().setAccessibleName("<html>Confirmar Contraseña:</html>");
 
-        getAccessibleContext().setAccessibleParent(btnBack);
+        getAccessibleContext().setAccessibleParent(__VOLVER);
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUserActionPerformed
-
-    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNameActionPerformed
-
-    private void btnlRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlRegisterActionPerformed
-
-        UsuariosJDBC userCon = new UsuariosJDBC();
-        Usuario newUser = new Usuario();
-
-        String pass = new String(txtPassword.getPassword());
-        String passConfirm = new String(txtConfirmPass.getPassword());
-
-        if (txtUser.getText().length() == 0 || txtPassword.getText().length() == 0 || txtConfirmPass.getText().length() == 0 || txtName.getText().length() == 0 || txtMail.getText().length() == 0) {
-            JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacios.");
-
-        } else {
-            if (pass.equals(passConfirm)) {
-
-                if (userCon.existeUsuario(txtUser.getText()) == 0) {
-                    
-                    if (userCon.validarEmail(txtMail.getText())) {
-                        String encrypPass = Hash.sha1(pass);
-
-                        newUser.setUsuario(txtUser.getText());
-                        newUser.setPassword(encrypPass);
-                        newUser.setNombre(txtName.getText());
-                        newUser.setMail(txtMail.getText());
-                        
-
-                        if (userCon.insert(newUser)) {
-                            JOptionPane.showMessageDialog(null, "Usuario registrado con exito.");
-                            clean();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Ha habido un error.");
-                            cleanPassword();
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "El correo electronico no es valido.");
-                        cleanPassword();
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "El usuario ya existe.");
-                    cleanPassword();
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden.");
-                cleanPassword();
-            }
-        }
-    }//GEN-LAST:event_btnlRegisterActionPerformed
-
-    private void clean() {
-
-        txtUser.setText("");
-        txtPassword.setText("");
-        txtConfirmPass.setText("");
-        txtName.setText("");
-        txtMail.setText("");
-
-    }
-    
-    private void cleanPassword() {
-        txtPassword.setText("");
-        txtConfirmPass.setText("");
-    }
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
-
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        this.dispose();
-        Inicio.reg = null;
-    }//GEN-LAST:event_btnBackActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        this.dispose();
-        Inicio.reg = null;
+        dispose();
+        InicioControlador.reg = null;
     }//GEN-LAST:event_formWindowClosing
 
     /**
@@ -310,18 +204,18 @@ public class Registro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnlRegister;
+    public javax.swing.JButton __CREAR_USUARIO;
+    public javax.swing.JButton __VOLVER;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPasswordField txtConfirmPass;
-    private javax.swing.JTextField txtMail;
-    private javax.swing.JTextField txtName;
-    private javax.swing.JPasswordField txtPassword;
-    private javax.swing.JTextField txtUser;
+    public javax.swing.JPasswordField txtConfirmPass;
+    public javax.swing.JTextField txtMail;
+    public javax.swing.JTextField txtName;
+    public javax.swing.JPasswordField txtPassword;
+    public javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }

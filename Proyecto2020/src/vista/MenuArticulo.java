@@ -142,13 +142,13 @@ public class MenuArticulo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        this.dispose();
-        Home.mArt = null;
+        /*this.dispose();
+        Home.mArt = null;*/
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        this.dispose();
-        Home.mArt = null;
+        /*this.dispose();
+        Home.mArt = null;*/
     }//GEN-LAST:event_formWindowClosing
 
     /**

@@ -12,9 +12,36 @@ package modelo;
 public class Nota {
     
     private String tema, contenido;
+    private int id, idArticulo, idLibro;
 
     public Nota() {
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdArticulo() {
+        return idArticulo;
+    }
+
+    public void setIdArticulo(int idArticulo) {
+        this.idArticulo = idArticulo;
+    }
+
+    public int getIdLibro() {
+        return idLibro;
+    }
+
+    public void setIdLibro(int idLibro) {
+        this.idLibro = idLibro;
+    }
+
+    
 
     public Nota(String tema, String contenido) {
         this.tema = tema;
@@ -39,7 +66,7 @@ public class Nota {
 
     @Override
     public String toString() {
-        return "Nota{" + "tema=" + tema + ", contenido=" + contenido + '}';
+        return "Nota{" + "tema=" + tema + ", contenido=" + contenido + ", id=" + id + ", idArticulo=" + idArticulo + ", idLibro=" + idLibro + '}';
     }
 
 }
