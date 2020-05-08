@@ -89,13 +89,13 @@ public class MenuNotaControlador implements ActionListener, MouseListener{
             int fila = MenuNota.__tabla_notas.rowAtPoint(e.getPoint());
             
             if (fila > -1) {
-                this.vista.idNotaBox.setText(String.valueOf(MenuNota.__tabla_notas.getValueAt(fila, 0)));
+                this.vista.idNotaBox.setText(String.valueOf(MenuNota.__tabla_notas.getModel().getValueAt(fila, 0)));
                 
-                this.vista.temaBox.setText(String.valueOf(MenuNota.__tabla_notas.getValueAt(fila, 1)));
+                this.vista.temaBox.setText(String.valueOf(MenuNota.__tabla_notas.getValueAt(fila, 0)));
                 
-                this.vista.idLibroBox.setText(String.valueOf(MenuNota.__tabla_notas.getValueAt(fila, 2)));
+                this.vista.idLibroBox.setText(String.valueOf(MenuNota.__tabla_notas.getValueAt(fila, 1)));
                 
-                this.vista.idArticBox.setText(String.valueOf(MenuNota.__tabla_notas.getValueAt(fila, 3)));
+                this.vista.idArticBox.setText(String.valueOf(MenuNota.__tabla_notas.getValueAt(fila, 2)));
                 
                 this.vista.contenidoArea.setText(String.valueOf(MenuNota.__tabla_notas.getModel().getValueAt(fila, 4)));
                 
@@ -199,11 +199,11 @@ public class MenuNotaControlador implements ActionListener, MouseListener{
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
             };
-
+            @Override
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-
+            @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
@@ -257,7 +257,11 @@ public class MenuNotaControlador implements ActionListener, MouseListener{
             modelo.setDataVector(fila, columNames);
         }
         
-        tcm.removeColumn( tcm.getColumn(4) );
+        try{
+            tcm.removeColumn(tcm.getColumn(0));
+            tcm.removeColumn(tcm.getColumn(4));
+        }
+        catch (Exception e) {}
         
         return modelo;
     } 

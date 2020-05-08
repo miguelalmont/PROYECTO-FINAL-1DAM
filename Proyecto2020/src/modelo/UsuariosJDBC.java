@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import modelo.Usuario;
 
 /**
  *
@@ -114,7 +113,7 @@ public class UsuariosJDBC extends conexion.Conexion{
                 String usuario = rs.getString(2);
                 String nombre = rs.getString(3);
                 String mail = rs.getString(4);
-                var last_log = rs.getString(5);
+                String last_log = rs.getString(5);
                 /*System.out.print(" " + id_persona);
                  System.out.print(" " + nombre);
                  System.out.print(" " + apellido);
